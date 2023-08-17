@@ -20,6 +20,9 @@ const options = {
 
 buttonStart.addEventListener('click', onStart);
 
+function onStart() {
+  timerId = setInterval(startTimer, 1000);
+}
 const timer = {
   start() {
     const startTime = Date.now();
