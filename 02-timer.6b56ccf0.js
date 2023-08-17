@@ -1,2 +1,0 @@
-document.querySelector("#datetime-picker");const e=document.querySelector("[data-start]");document.querySelector("[data-days]"),document.querySelector("[data-hours]"),document.querySelector("[data-minutes]"),document.querySelector("[data-seconds]"),new Date;e.addEventListener("click",onStart);({start(){const e=Date.now();setInterval((()=>{const t=function(e){const t=Math.floor(e%864e5/36e5),o=Math.floor(e%144e4/6e4),r=Math.floor(e%24e3/1e3);return{hours:t,mins:o,secs:r}}(Date.now()-e);console.log(t)}),1e3)}}).start();
-//# sourceMappingURL=02-timer.6b56ccf0.js.map
