@@ -1,5 +1,5 @@
-const buttonStart = document.querySelector('[data - start]');
-const buttonStop = document.querySelector('[data - stop]');
+const buttonStart = document.querySelector('[data-start]');
+const buttonStop = document.querySelector('[data-stop]');
 const bodyAll = document.querySelector('body');
 let timerId = null;
 
@@ -19,7 +19,7 @@ function onStart() {
 
 function onStop() {
   clearInterval(timerId);
-  buttonStart.remove('disabled');
+  // buttonStart.remove('disabled');
 }
 
 function changeColor() {

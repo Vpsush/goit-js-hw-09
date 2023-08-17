@@ -1,8 +1,12 @@
-import flatpickr from 'flatpickr';
-import 'flatpickr/dist/flatpickr.min.css';
+// import flatpickr from 'flatpickr';
+// import 'flatpickr/dist/flatpickr.min.css';
 
 const dataForm = document.querySelector('#datetime-picker');
 const buttonStart = document.querySelector('[data-start]');
+const dataDays = document.querySelector('[data-days]');
+const dataHours = document.querySelector('[data-hours]');
+const dataMinutes = document.querySelector('[data-minutes]');
+const dataSeconds = document.querySelector('[data-seconds]');
 
 const options = {
   enableTime: true,
@@ -13,3 +17,30 @@ const options = {
     console.log(selectedDates[0]);
   },
 };
+
+buttonStart.addEventListener('click', onStart);
+
+const timer = {
+  start() {
+    const startTime = Date.now();
+
+    setInterval(() => {
+      const curetnTime = Date.now();
+      const deltaTime = curetnTime - startTime;
+      const timeComponents = getTimeComponents(deltaTime);
+      console.log(timeComponents);
+    }, 1000);
+  },
+};
+timer.start();
+
+function getTimeComponents(time) {
+  const hours = Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const mins = Math.floor((time % (1000 * 60 * 24)) / (1000 * 60));
+  const secs = Math.floor((time % (1000 * 24)) / 1000);
+  return { hours, mins, secs };
+}
+
+function updateClockface({ hours, mins, secs }) {
+  dataForm.clo;
+}
