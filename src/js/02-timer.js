@@ -39,8 +39,8 @@ const timer = {
     this.intervalId = setInterval(() => {
       const currentTime = Date.now();
       const deltaTime = currentTime - startTime;
-      const time = convertMs(deltaTime);
-      updateClockface(time);
+      const { days, hours, minutes, seconds } = convertMs(deltaTime);
+      updateClockface({ days, hours, minutes, seconds });
       dataDays.textContent = padDays(`${days}`);
       dataHours.textContent = pad(`${hours}`);
       dataMinutes.textContent = pad(`${minutes}`);
