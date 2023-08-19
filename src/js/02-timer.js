@@ -1,5 +1,6 @@
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 const dataForm = document.querySelector('#datetime-picker');
 const buttonStart = document.querySelector('[data-start]');
@@ -14,8 +15,8 @@ const options = {
   time_24hr: true,
   defaultDate: new Date(),
   minuteIncrement: 1,
-  onClose(selectedDates) {
-    console.log(selectedDates[0]);
+  onClose(startTime) {
+    console.log(startTime[0]);
   },
 };
 flatpickr(dataForm, options);
@@ -39,6 +40,11 @@ const timer = {
 
     this.intervalId = setInterval(() => {
       const currentTime = Date.now();
+      if (currentTime < startTime) {
+        buttonStart.setAttribute('disabled', true);
+        return Notify.failure('Please choose a date in the future');
+      }
+
       const deltaTime = currentTime - startTime;
       const { days, hours, minutes, seconds } = convertMs(deltaTime);
       updateClockface({ days, hours, minutes, seconds });
@@ -46,6 +52,8 @@ const timer = {
       dataHours.textContent = pad(`${hours}`);
       dataMinutes.textContent = pad(`${minutes}`);
       dataSeconds.textContent = pad(`${seconds}`);
+      updateClockface({ days, hours, minutes, seconds });
+      buttonStart.removeAttribute('disabled');
     }, 1000);
   },
 };
@@ -57,17 +65,6 @@ function padDays(value) {
   return String(value).padStart(3, '0');
 }
 
-// function getTimeComponents(time) {
-//   const days = pad(
-//     Math.floor((time % (1000 * 60 * 60 * 24 * 30)) / (1000 * 60 * 60 * 24))
-//   );
-//   const hours = pad(
-//     Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
-//   );
-//   const mins = pad(Math.floor((time % (1000 * 60 * 24)) / (1000 * 60)));
-//   const secs = pad(Math.floor((time % (1000 * 24)) / 1000));
-//   return { days, hours, mins, secs };
-// }
 function convertMs(ms) {
   // Number of milliseconds per unit of time
   const second = 1000;
@@ -86,10 +83,6 @@ function convertMs(ms) {
 
   return { days, hours, minutes, seconds };
 }
-
-// console.log(convertMs(2000)); // {days: 0, hours: 0, minutes: 0, seconds: 2}
-// console.log(convertMs(140000)); // {days: 0, hours: 0, minutes: 2, seconds: 20}
-// console.log(convertMs(24140000)); // {days: 0, hours: 6 minutes: 42, seconds: 20}
 
 function updateClockface({ days, hours, minutes, seconds }) {
   timerClock.textContent = `${days}:${hours}:${minutes}:${seconds}`;
