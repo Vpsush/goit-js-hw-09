@@ -1,4 +1,4 @@
-// import flatpickr from 'flatpickr';
+import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
 const dataForm = document.querySelector('#datetime-picker');
@@ -18,6 +18,7 @@ const options = {
     console.log(selectedDates[0]);
   },
 };
+flatpickr(dataForm, options);
 
 buttonStart.addEventListener('click', () => {
   timer.start();
