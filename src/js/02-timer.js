@@ -8,7 +8,17 @@ const dataDays = document.querySelector('[data-days]');
 const dataHours = document.querySelector('[data-hours]');
 const dataMinutes = document.querySelector('[data-minutes]');
 const dataSeconds = document.querySelector('[data-seconds]');
-const timerClock = document.querySelector('.timer');
+const look = document.querySelector('.timer');
+// const lookSign = document.querySelectorAll('.field');
+
+look.style.display = 'flex';
+look.style.flexDirection = 'row';
+// look.style.columnGap = '12px';
+look.style.fontSize = '20px';
+
+let deltaTime = 0;
+let timerId = null;
+let formatDate = null;
 
 const options = {
   enableTime: true,
@@ -17,52 +27,54 @@ const options = {
   minuteIncrement: 1,
   onClose(startTime) {
     console.log(startTime[0]);
+    timerStart(startTime[0]);
   },
 };
+
+buttonStart.setAttribute('disabled', true);
+
 flatpickr(dataForm, options);
 
-buttonStart.addEventListener('click', () => {
-  timer.start();
+window.addEventListener('keydown', e => {
+  if (e.code === 'Escape' && timerId) {
+    clearInterval(timerId);
+
+    dataForm.removeAttribute('disabled');
+    buttonStart.setAttribute('disabled', true);
+  }
 });
 
-// function onStart() {
-//   timerId = setInterval(startTimer, 1000);
-// }
-const timer = {
-  intervalId: null,
-  isActive: false,
-  start() {
-    if (this.isActive) {
-      return;
-    }
-    const startTime = Date.now();
-    this.isActive = true;
+buttonStart.addEventListener('click', onStart);
 
-    this.intervalId = setInterval(() => {
-      const currentTime = Date.now();
-      if (currentTime < startTime) {
-        buttonStart.setAttribute('disabled', true);
-        return Notify.failure('Please choose a date in the future');
-      }
-
-      const deltaTime = currentTime - startTime;
-      const { days, hours, minutes, seconds } = convertMs(deltaTime);
-      updateClockface({ days, hours, minutes, seconds });
-      dataDays.textContent = padDays(`${days}`);
-      dataHours.textContent = pad(`${hours}`);
-      dataMinutes.textContent = pad(`${minutes}`);
-      dataSeconds.textContent = pad(`${seconds}`);
-      updateClockface({ days, hours, minutes, seconds });
-      buttonStart.removeAttribute('disabled');
-    }, 1000);
-  },
-};
-
-function pad(value) {
-  return String(value).padStart(2, '0');
+function onStart() {
+  timerId = setInterval(startTimer, 1000);
 }
-function padDays(value) {
-  return String(value).padStart(3, '0');
+
+function timerStart(startTime) {
+  const currentTime = Date.now();
+  if (currentTime >= startTime) {
+    return Notify.failure('Please choose a date in the future');
+  }
+  deltaTime = startTime.getTime() - currentTime;
+  formatDate = convertMs(deltaTime);
+
+  renderDate(formatDate);
+  buttonStart.removeAttribute('disabled');
+}
+
+function startTimer() {
+  buttonStart.setAttribute('disabled', true);
+  dataForm.setAttribute('disabled', true);
+
+  deltaTime -= 1000;
+
+  if (dataSeconds.textContent <= 0 && dataMinutes.textContent <= 0) {
+    Notify.success('Time end');
+    clearInterval(timerId);
+  } else {
+    formatDate = convertMs(deltaTime);
+    renderDate(formatDate);
+  }
 }
 
 function convertMs(ms) {
@@ -86,4 +98,10 @@ function convertMs(ms) {
 
 function updateClockface({ days, hours, minutes, seconds }) {
   timerClock.textContent = `${days}:${hours}:${minutes}:${seconds}`;
+}
+function renderDate(formatDate) {
+  dataSeconds.textContent = String(formatDate.seconds).padStart(2, '0');
+  dataMinutes.textContent = String(formatDate.minutes).padStart(2, '0');
+  dataHours.textContent = String(formatDate.hours).padStart(2, '0');
+  dataDays.textContent = String(formatDate.days).padStart(2, '0');
 }
