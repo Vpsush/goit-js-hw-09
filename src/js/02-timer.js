@@ -8,13 +8,13 @@ const dataDays = document.querySelector('[data-days]');
 const dataHours = document.querySelector('[data-hours]');
 const dataMinutes = document.querySelector('[data-minutes]');
 const dataSeconds = document.querySelector('[data-seconds]');
-const look = document.querySelector('.timer');
+// const look = document.querySelector('.timer');
 // const lookSign = document.querySelectorAll('.field');
 
-look.style.display = 'flex';
-look.style.flexDirection = 'row';
-// look.style.columnGap = '12px';
-look.style.fontSize = '20px';
+// look.style.display = 'flex';
+// look.style.flexDirection = 'row';
+// // look.style.columnGap = '12px';
+// look.style.fontSize = '20px';
 
 let deltaTime = 0;
 let timerId = null;
