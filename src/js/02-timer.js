@@ -61,7 +61,8 @@ function startTimer() {
 
   deltaTime -= 1000;
 
-  if (dataSeconds.textContent <= 0) {
+  // if (dataSeconds.textContent <= 0 && dataMinutes.textContent <= 0) {
+  if (deltaTime <= 1000) {
     Notify.success('Time end');
     clearInterval(timerId);
   } else {
