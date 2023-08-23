@@ -14,12 +14,16 @@ function getRandomHexColor() {
 
 function onStart() {
   timerId = setInterval(changeColor, 1000);
-  buttonStart.toggleAttribute('disabled');
+  // buttonStart.toggleAttribute('disabled');
+  buttonStart.disabled = true;
+  buttonStop.disabled = false;
 }
 
 function onStop() {
   clearInterval(timerId);
-  // buttonStart.remove('disabled');
+  // buttonStop.removeAttribute('disabled');
+  buttonStart.disabled = false;
+  buttonStop.disabled = true;
 }
 
 function changeColor() {
